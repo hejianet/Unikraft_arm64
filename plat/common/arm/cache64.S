@@ -1,5 +1,8 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /*
+ * This source code is based on:
+ * github.com/freebsd/freebsd/blob/de41c46/sys/arm64/arm64/cpufunc_asm.S
+ *
  * Authors: Wei Chen <wei.chen@arm.com>
  *
  * Copyright (c) 2014 Robin Randhawa
