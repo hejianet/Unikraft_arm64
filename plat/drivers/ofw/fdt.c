@@ -55,3 +55,45 @@ int fdt_getprop_u32_by_offset(const void *fdt, int offset,
 
 	return -FDT_ERR_NOTFOUND;
 }
+
+static int fdt_find_irq_parent_offset(const void *fdt, int offset)
+{
+	uint32_t irq_parent;
+
+	do {
+		/* Find the interrupt-parent phandle */
+		if (!fdt_getprop_u32_by_offset(fdt, offset,
+				"interrupt-parent", &irq_parent))
+			break;
+
+		/* Try to find in parent node */
+		offset = fdt_parent_offset(fdt, offset);
+	} while (offset >= 0);
+
+	if (offset < 0)
+		return offset;
+
+	/* Get interrupt parent node by phandle */
+	return fdt_node_offset_by_phandle(fdt, irq_parent);
+}
+
+int fdt_interrupt_cells(const void *fdt, int offset)
+{
+	int intc_offset;
+	int val;
+	int ret;
+
+	intc_offset = fdt_find_irq_parent_offset(fdt, offset);
+	if (intc_offset < 0)
+		return intc_offset;
+
+	ret = fdt_getprop_u32_by_offset(fdt, intc_offset, "#interrupt-cells",
+					(uint32_t *)&val);
+	if (ret < 0)
+		return ret;
+
+	if ((val <= 0) || (val > FDT_MAX_NCELLS))
+		return -FDT_ERR_BADNCELLS;
+
+	return val;
+}

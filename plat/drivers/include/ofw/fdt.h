@@ -56,4 +56,24 @@
 int fdt_getprop_u32_by_offset(const void *fdt, int nodeoffset,
 		const char *name, uint32_t *out);
 
+/**
+ * fdt_interrupt_cells - retrieve the number of cells needed to encode an
+ *                       interrupt source
+ * @fdt: pointer to the device tree blob
+ * @nodeoffset: offset of the node to find the interrupt for.
+ *
+ * When the node has a valid #interrupt-cells property, returns its value.
+ *
+ * returns:
+ *     0 <= n < FDT_MAX_NCELLS, on success
+ *      -FDT_ERR_BADNCELLS, if the node has a badly formatted or invalid
+ *             #interrupt-cells property
+ *     -FDT_ERR_BADMAGIC,
+ *     -FDT_ERR_BADVERSION,
+ *     -FDT_ERR_BADSTATE,
+ *     -FDT_ERR_BADSTRUCTURE,
+ *     -FDT_ERR_TRUNCATED, standard meanings
+ */
+int fdt_interrupt_cells(const void *fdt, int nodeoffset);
+
 #endif
