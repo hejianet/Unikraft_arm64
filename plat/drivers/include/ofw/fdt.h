@@ -120,4 +120,17 @@ int fdt_get_address(const void *fdt, int nodeoffset, int index,
 int fdt_node_offset_by_compatible_list(const void *fdt, int startoffset,
 					const char * const compatibles[]);
 
+/**
+ * fdt_get_interrupt - retrieve device interrupt of a given index
+ * @fdt: pointer to the device tree blob
+ * @nodeoffset: offset of the node to find the address for
+ * @index: the index of interrupt we want to retrieve
+ * @size: interrupt cell size in fdt32_t
+ *
+ * returns:
+ *      NULL on failed, non-NULL on success
+ */
+const void *fdt_get_interrupt(const void *fdt, int nodeoffset,
+				int index, int *size);
+
 #endif

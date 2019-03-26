@@ -286,3 +286,32 @@ int fdt_node_offset_by_compatible_list(const void *fdt, int startoffset,
 
 	return FDT_ERR_NOTFOUND;
 }
+
+const void *fdt_get_interrupt(const void *fdt, int nodeoffset,
+			int index, int *size)
+{
+	int nintr, len, term_size;
+	const void *regs;
+
+	nintr = fdt_interrupt_cells(fdt, nodeoffset);
+	if (nintr < 0 || nintr >= FDT_MAX_NCELLS)
+		return NULL;
+
+	/* "interrupts-extended" is not supported */
+	regs = fdt_getprop(fdt, nodeoffset, "interrupts-extended", &len);
+	if (regs) {
+		uk_pr_warn("interrupts multiple parents is not supported\n");
+		return NULL;
+	}
+	/*
+	 * Interrupt content must cover the index specific irq information.
+	 */
+	regs = fdt_getprop(fdt, nodeoffset, "interrupts", &len);
+	term_size = sizeof(fdt32_t) * nintr;
+	if (regs == NULL || len < term_size * (index + 1))
+		return NULL;
+
+	*size = nintr;
+
+	return regs + term_size * index;
+}
