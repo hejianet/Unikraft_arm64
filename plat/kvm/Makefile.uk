@@ -32,11 +32,6 @@ LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/x86/traps.c|comm
 LIBKVMPLAT_TRAPS_COMMON_FLAGS += $(NO_X86_EXTREGS_FLAGS)
 LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/x86/cpu_features.c|common
 LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/x86/cpu_native.c|common
-ifeq ($(CONFIG_HAVE_SCHED),y)
-LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/x86/thread_start.S|common
-LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/thread.c|common
-LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/sw_ctx.c|common
-endif
 LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(LIBKVMPLAT_BASE)/x86/entry64.S
 LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(LIBKVMPLAT_BASE)/x86/traps.c
 LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(LIBKVMPLAT_BASE)/x86/cpu_vectors_x86_64.S
@@ -81,6 +76,16 @@ LIBKVMPLAT_SRCS-y              += $(LIBKVMPLAT_BASE)/irq.c
 LIBKVMPLAT_SRCS-y              += $(LIBKVMPLAT_BASE)/io.c
 LIBKVMPLAT_SRCS-y              += $(UK_PLAT_COMMON_BASE)/lcpu.c|common
 LIBKVMPLAT_SRCS-y              += $(UK_PLAT_COMMON_BASE)/memory.c|common
+
+##
+## Multi-thread support library definitions
+##
+ifeq ($(CONFIG_HAVE_SCHED),y)
+LIBKVMPLAT_SRCS-$(CONFIG_ARCH_X86_64) += $(UK_PLAT_COMMON_BASE)/x86/thread_start.S|common
+LIBKVMPLAT_SRCS-$(CONFIG_ARCH_ARM_64) += $(UK_PLAT_COMMON_BASE)/arm/thread_start64.S|common
+LIBKVMPLAT_SRCS-y += $(UK_PLAT_COMMON_BASE)/thread.c|common
+LIBKVMPLAT_SRCS-y += $(UK_PLAT_COMMON_BASE)/sw_ctx.c|common
+endif
 
 ##
 ## PCI library definitions
